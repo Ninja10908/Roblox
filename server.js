@@ -9,8 +9,25 @@ const AUTH_TOKEN = "MySecretToken123!@#";
 const offers = [];
 const clients = new Map();
 
+// ✅ ADD THIS ROOT ROUTE
 app.get('/', (req, res) => {
-    res.send('✅ Pet Trading Server Running!');
+    res.send(`
+        <h1>🐾 Pet Trading Server</h1>
+        <p>✅ Server is running!</p>
+        <p>Connected Clients: ${clients.size}</p>
+        <p>Total Offers: ${offers.length}</p>
+        <p>WebSocket endpoint: wss://${req.get('host')}/ws/${AUTH_TOKEN}</p>
+    `);
+});
+
+// ✅ ADD A STATUS ROUTE
+app.get('/status', (req, res) => {
+    res.json({
+        status: 'online',
+        clients: clients.size,
+        offers: offers.length,
+        uptime: process.uptime()
+    });
 });
 
 const server = app.listen(port, () => {
